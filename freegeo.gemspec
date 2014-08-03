@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'freegeo'
-  s.version     = '0.0.0'
+  s.version     = '0.0.1'
   s.date        = '2014-08-02'
   s.summary     = "A freer geocoder gem"
   s.description = "A geocoder, reverse geocoder and distance calculator using the mapquest api"
