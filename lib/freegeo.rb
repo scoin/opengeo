@@ -16,26 +16,39 @@ class FreeGeo
 
 	def geocode(address)
 		#will take an address and return lat / long
-		address = address.split(' ').join('%20')
+		address.gsub!(/ /, "%20")
 		request = build_url("address" => address)
-		response = http_request_and_parse(request)
-		[response["lat"], response["lng"]].join(',')
+		parse_latlng(http_request(request))
 	end
 
-	def reverse(opts = {})
+	def reverse(latlng)
 		#will take a lat and long and return an address
 		# self.version + /reverse?key=YOUR_KEY_HERE&callback=renderReverse&location=40.053116,-76.313603
+		latlng.gsub!(/ /, '')
+		request = build_url("reverse" => latlng)
+		parse_address(http_request(request))
 	end
+
+	private
 
 	def build_url(opts = {})
 		call = opts.keys.first
 		url = self.version + call + "?key=" + self.key 
-		url += "&callback=renderReverse&" if call == "reverse"
 		url += "&location=" + opts[call] + self.extraparams
 	end
 
-	def http_request_and_parse(request)
-		JSON.parse(Net::HTTP.get_response(self.url,request).body)["results"][0]["locations"][0]["latLng"]
+	def http_request(request)
+		JSON.parse(Net::HTTP.get_response(self.url,request).body)
+	end
+
+	def parse_latlng(response)
+		response = response["results"][0]["locations"][0]["latLng"]
+		[response["lat"], response["lng"]].join(',')
+	end
+
+	def parse_address(response)
+		address = response["results"][0]["locations"][0]
+		[address["street"], address["adminArea5"], address["adminArea3"], address["postalCode"]].join(', ')
 	end
 
 end
