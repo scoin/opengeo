@@ -2,10 +2,11 @@ require 'net/http'
 require 'json'
 
 class FreeGeo
-	attr_reader :key, :url, :extraparams
+	attr_reader :key, :url, :version, :extraparams
 	def initialize(apikey, opts = {})
 		@key = apikey
 		@url = "open.mapquestapi.com"
+		@version = "/geocoding/v1/"
 		@extraparams = "&thumbMaps=false&maxResults=1"
 	end
 
@@ -13,22 +14,24 @@ class FreeGeo
 		#will take two points and calculate distance using haversine
 	end
 
-	def geocode(opts = {})
+	def geocode(address)
 		#will take an address and return lat / long
-		address = opts[:address].split(' ').join('%20')
-		request = build_url(address)
+		address = address.split(' ').join('%20')
+		request = build_url("address" => address)
 		response = http_request_and_parse(request)
 		[response["lat"], response["lng"]].join(',')
 	end
 
-	def getaddress(opts = {})
+	def reverse(opts = {})
 		#will take a lat and long and return an address
+		# self.version + /reverse?key=YOUR_KEY_HERE&callback=renderReverse&location=40.053116,-76.313603
 	end
 
-	private
-
-	def build_url(address)
-		"/geocoding/v1/address/?key=" + self.key + "&location=" + address + self.extraparams
+	def build_url(opts = {})
+		call = opts.keys.first
+		url = self.version + call + "?key=" + self.key 
+		url += "&callback=renderReverse&" if call == "reverse"
+		url += "&location=" + opts[call] + self.extraparams
 	end
 
 	def http_request_and_parse(request)
