@@ -1,7 +1,7 @@
 require 'net/http'
 require 'json'
 
-class FreeGeo
+class OpenGeo
 	attr_reader :key, :url, :version, :extraparams
 	def initialize(apikey, opts = {})
 		@key = apikey
