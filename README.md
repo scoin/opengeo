@@ -14,6 +14,10 @@ http://developer.mapquest.com/web/products/open/geocoding-service
 
 First you will need to:
 
+    gem install opengeo
+    
+and in your application
+
     require 'opengeo'
 
 To instantiate an OpenGeo object, do:
