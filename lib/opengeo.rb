@@ -12,6 +12,9 @@ class OpenGeo
 
 	def distance(opts = {})
 		#will take two points and calculate distance using haversine
+		start, endpoint = opts[:start], opts[:endpoint]
+
+		
 	end
 
 	def geocode(address)
