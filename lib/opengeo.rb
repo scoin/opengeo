@@ -23,7 +23,6 @@ class OpenGeo
 
 	def reverse(latlng)
 		#will take a lat and long and return an address
-		# self.version + /reverse?key=YOUR_KEY_HERE&callback=renderReverse&location=40.053116,-76.313603
 		latlng.gsub!(/ /, '')
 		request = build_url("reverse" => latlng)
 		parse_address(http_request(request))
